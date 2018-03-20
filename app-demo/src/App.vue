@@ -4,7 +4,7 @@
     <slider-app></slider-app>
     <aside-app :list="chartList"></aside-app>
     <article-app></article-app>
-    <charts-app></charts-app>
+    <charts-app :show-chart="Charts"></charts-app>
   </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
           type: 'line'
         },
       ],
-      selectedChart: '',
+      Charts: []
     }
   },
   components: {
@@ -49,8 +49,7 @@ export default {
   },
   created() {
     this.$root.$on('add', (selected) => {
-      this.selectedChart = selected;
-      console.log('2', selected);
+      this.Charts.push(selected);
     })
   }
 }

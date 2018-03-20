@@ -1,11 +1,10 @@
 <template>
   <div>
-    <article class="article article--w50" v-for="item in Charts">
+    <article class="article article--w50" v-for="chart in showChart">
       <vue-highcharts :options="options" ref="lineCharts"></vue-highcharts>
     </article>
   </div>
 </template>
-
 <script>
   import VueHighcharts from 'vue2-highcharts'
   const asyncData = {
@@ -28,13 +27,13 @@
       return{
         options: {
           chart: {
-            type: 'spline'
+//            type: 'pie'
           },
           title: {
-            text: 'Monthly Average Temperature'
+            text: ''
           },
           subtitle: {
-            text: 'Source: WorldClimate.com'
+            text: ''
           },
           xAxis: {
             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -67,21 +66,24 @@
             }
           },
           series: []
-        },
-        Charts: [1, 1]
+        }
       }
     },
-    methods: {
-      createChart(){
-        let lineCharts = this.$refs.lineCharts;
+    props: ['show-chart'],
+    updated: function () {
+      let count = 0;
+      let lineCharts = null;
+      this.$nextTick(function () {
+        count = (this.showChart.length - 1);
+        lineCharts = this.$refs.lineCharts[count];
+        this.options.chart['type'] = this.showChart[count];
         lineCharts.delegateMethod('showLoading', 'Loading...');
         setTimeout(() => {
           lineCharts.addSeries(asyncData);
           lineCharts.hideLoading();
         }, 2000)
-      }
-    },
-
+      })
+    }
   }
 </script>
 
